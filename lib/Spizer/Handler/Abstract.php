@@ -99,7 +99,7 @@ abstract class Spizer_Handler_Abstract
 	    $type   = $document->getHeader('content-type');
 	    
 	    $call = true;
-	    if ($this->config['status']) {
+	    if (isset($this->config['status'])) {
 	        if (is_array($this->config['status'])) {
 	            if (! in_array($status, $this->config['status'])) $call = false;
 	        } elseif ($this->config['status'] != $status) {
@@ -107,7 +107,7 @@ abstract class Spizer_Handler_Abstract
 	        }
 	    }
 	    
-	    if ($this->config['content-type']) {
+	    if (isset($this->config['content-type'])) {
 	        if (is_array($this->config['content-type'])) {
 	            if (! in_array($type, $this->config['content-type'])) $call = false;
 	        } elseif ($this->config['content-type'] != $type) {
