@@ -3,14 +3,17 @@
 require_once 'Spizer/Handler/Abstract.php';
 require_once 'Diggin/Scraper/Helper/Simplexml/Pagerize.php';
 
-class Kumo_Handler_NextLInkAppender extends Spizer_Handler_Abstract
+class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
 {
     // target maybe only next-url
     private $targets = array();
 
     protected $config = array(
-        'pre_ampasand_escape' => false
+        'pre_ampasand_escape' => false,
+        'max_follow' => false
         );
+
+    protected $page_count = 1;
 
     public function handle(Spizer_Document $doc)
     {
@@ -22,10 +25,14 @@ class Kumo_Handler_NextLInkAppender extends Spizer_Handler_Abstract
 
         $pagerize = new Diggin_Scraper_Helper_Simplexml_Pagerize(simplexml_import_dom($doc->getDomDocument()),
                             array('baseUrl' => $this->toUrl($doc->getUrl()),
-                                'preAmpFilter' => $this->config[ 'pre_ampasand_escape'])
+                                  'preAmpFilter' => (boolean) $this->config[ 'pre_ampasand_escape'])
                           );
         if ($nextLink = $pagerize->getNextLink()) {
-            $this->addToQueue($nextLink, $baseUrl);
+            $max_follow = $this->config['max_follow'];
+            if (!($max_follow) or $max_follow <= $this->page_count) {
+                $this->addToQueue($nextLink, $baseUrl);
+                ++$this->page_count;
+            }
         }
     }
 
