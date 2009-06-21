@@ -9,7 +9,7 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
     private $targets = array();
 
     protected $config = array(
-        'pre_ampasand_escape' => false,
+        'pre_ampersand_escape' => false,
         'max_follow' => false
         );
 
