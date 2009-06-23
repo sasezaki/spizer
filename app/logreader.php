@@ -6,7 +6,7 @@ class KumoMod_Model_SpizerLog
 {
     private $_logger;
 
-    public function __construct($loggerPath = '../zend-test.sq3')
+    public function __construct($loggerPath = 'zend-test.sq3')
     {
         if (!$logger = realpath($loggerPath)) {
             throw new KumoMod_Exception();
@@ -30,7 +30,7 @@ class KumoMod_Model_SpizerLog
 
 if (debug_backtrace()) return;
 
-$spizerlog = new KumoMod_Model_SpizerLog;
+$spizerlog = new KumoMod_Model_SpizerLog(isset($argv[1])? $argv[1]: dirname(__FILE__).'/zend-test.sq3');
 
 require_once 'Zend/Text/Table.php';
 require_once 'Zend/Text/Table/Column.php';
