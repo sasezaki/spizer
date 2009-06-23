@@ -1,3 +1,23 @@
+This is fork of shevron/spizer
+
+[What's different?]
+-----------------------------------------------------------------------------
+-modifying Spizer* for only typo & E_NOTICE(and little bug..)
+-add Kumo* as Spizer-Extend & my-sample
+
+--
+Kumo means spider in Japanese.
+
+Contact:sasezaki
+================
+sasezaki+github@gmail.com
+
+
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
 Spizer - a flexible PHP based web spider                          version 0.1
 -----------------------------------------------------------------------------
 Copyright 2009 Shahar Evron
@@ -22,3 +42,4 @@ tips.
 Contact
 =======
 You can contact me at shahar.evron@gmail.com
+
