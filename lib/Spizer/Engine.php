@@ -95,22 +95,6 @@ class Spizer_Engine
 	 */
 	protected $requestCounter = 0;
 	
-    protected $responseClassName;
-
-    //
-    public function setResponseClassName($name)
-    {
-        $this->responseClassName = $name;
-    }
-    
-    public function getResponseClassName()
-    {
-        if (!isset($this->responseClassName)) {
-            return "Spizer_Response";
-        }
-
-        return $this->responseClassName;
-    }
 	/**
 	 * Create a new Spizer Engine object
 	 *
@@ -227,8 +211,7 @@ class Spizer_Engine
 		    
        	    // Send request, catching any HTTP related issues that might happen
        	    try {
-	            $class = $this->getResponseClassName();
-	            $response = new $class($this->httpClient->request());
+	            $response = new Spizer_Response($this->httpClient->request());
        	    } catch (Zend_Exception $e) {
        	        fwrite(STDERR, "Error executing request: {$e->getMessage()}.\n");
        	        fwrite(STDERR, "Request information:\n");
@@ -334,3 +317,4 @@ class Spizer_Engine
 		}
 	}
 }
+
