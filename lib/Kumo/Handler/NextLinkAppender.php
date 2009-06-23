@@ -9,7 +9,6 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
     private $targets = array();
 
     protected $config = array(
-        'pre_ampersand_escape' => false,
         'max_follow' => false
         );
 
@@ -24,8 +23,7 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
         if (! $doc instanceof Spizer_Document_Html) return;
 
         $pagerize = new Diggin_Scraper_Helper_Simplexml_Pagerize(simplexml_import_dom($doc->getDomDocument()),
-                            array('baseUrl' => $this->toUrl($doc->getUrl()),
-                                  'preAmpFilter' => (boolean) $this->config[ 'pre_ampasand_escape'])
+                            array('baseUrl' => $this->toUrl($doc->getUrl()))
                           );
         if ($nextLink = $pagerize->getNextLink()) {
             $max_follow = $this->config['max_follow'];
