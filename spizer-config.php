@@ -55,7 +55,7 @@ if ($opts->v) {
 
 // Make sure we have a URL
 $args = $opts->getRemainingArgs();
-$url = $args[0];
+$url = isset($args[0]) ? $args[0]: null;
 if (! $url) {
    spizer_usage();
    exit(1); 
@@ -130,6 +130,7 @@ if (function_exists('pcntl_signal')) {
 // Go!
 $engine->run($url);
 
+do_exit();
 /**
  * -------
  * Execution ends here - Some functions are defined next
