@@ -26,6 +26,7 @@ require_once 'Spizer/Handler/LinkAppender.php';
 require_once 'Spizer/Handler/ZendImages.php';
 require_once 'Spizer/Handler/StringMatch.php';
 require_once 'Spizer/Handler/RegexMatch.php';
+require_once 'Kumo/Handler/RegexMatch.php';
 require_once 'Spizer/Logger/Sqlite.php';
 
 $opts = new Zend_Console_Getopt(array(
@@ -78,10 +79,6 @@ $spizer = new Spizer_Engine(array(
     'lifo'        => true
 ));
 
-// set responseClassName
-$spizer->setResponseClassName("Kumo_Response");require_once 'Kumo/Response.php';
-
-
 // Set logger
 $logger = new Spizer_Logger_Sqlite(array('dbfile' => $log));
 $spizer->setLogger($logger);
@@ -104,10 +101,8 @@ $spizer->addHandler(new Spizer_Handler_StringMatch(array(
     'status'       => 200, 
     'content-type' => 'text/html')));
 
-$spizer->addHandler(new Spizer_Handler_RegexMatch(array(
+$spizer->addHandler(new Kumo_Handler_RegexMatch(array(
     'match' => '/<title>(.*)<\/title>/si')));
-
-//$spizer->addHandler(new Spizer_Handler_ZendImages());
 
 // Go!
 $spizer->run($url);
