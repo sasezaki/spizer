@@ -96,7 +96,7 @@ $engine = new Spizer_Engine((array) $config->engine);
 Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(
     Zend_Cache::factory($config->pagerize->cache->frontend,
                         $config->pagerize->cache->backend,
-                        $op = $config->pagerize->cache->frontendOptions->toArray(),
+                        $config->pagerize->cache->frontendOptions->toArray(),
                         $config->pagerize->cache->backendOptions->toArray()
                         )
     );
