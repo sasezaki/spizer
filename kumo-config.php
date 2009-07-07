@@ -93,8 +93,14 @@ $engine = new Spizer_Engine((array) $config->engine);
 /**
  * set up next-link
  */
-Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(getCache());
-//2 キーを指定してsiteinfo配列をセットします
+Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(
+    Zend_Cache::factory($config->pagerize->cache->frontend,
+                        $config->pagerize->cache->backend,
+                        $op = $config->pagerize->cache->frontendOptions->toArray(),
+                        $config->pagerize->cache->backendOptions->toArray()
+                        )
+    );
+//siteinfo配列をセットします
 Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', 
                                 array(
                                      array('url' => '^http://d.hatena.ne.jp/.+', 
@@ -105,24 +111,6 @@ Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo',
                                            'nextLink' => '//a'),
                                           )
                                 );
-
-function getCache($cache_dir = '.', $frontendOptions= null)
-{
-    //cache
-    if($frontendOptions === null) {
-        $frontendOptions = array(
-            'lifetime' => 86400,
-        'automatic_serialization' => true
-        );
-    }
-
-    $backendOptions = array(
-        'cache_dir' => $cache_dir
-    );
-    
-    require_once 'Zend/Cache.php';
-    return Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-}
 
 /**
  * Set up the logger object
