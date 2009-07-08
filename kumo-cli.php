@@ -27,6 +27,7 @@ require_once 'Spizer/Handler/ZendImages.php';
 require_once 'Spizer/Handler/StringMatch.php';
 require_once 'Spizer/Handler/RegexMatch.php';
 require_once 'Kumo/Handler/RegexMatch.php';
+require_once 'Kumo/Handler/Image.php';
 require_once 'Spizer/Logger/Sqlite.php';
 
 $opts = new Zend_Console_Getopt(array(
@@ -103,6 +104,8 @@ $spizer->addHandler(new Spizer_Handler_StringMatch(array(
 
 $spizer->addHandler(new Kumo_Handler_RegexMatch(array(
     'match' => '/<title>(.*)<\/title>/si')));
+$spizer->addHandler(new Kumo_Handler_Image(array(
+    'save_path' => __DIR__)));
 
 // Go!
 $spizer->run($url);
