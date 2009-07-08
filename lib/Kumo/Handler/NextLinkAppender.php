@@ -10,17 +10,18 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
 
     protected $config = array(
         'max_follow' => false
-        );
+    );
 
     protected $page_count = 1;
 
     public function handle(Spizer_Document $doc)
     {
-       // Add document URL to the list of visited pages
-        $baseUrl = $this->toUrl($doc->getUrl());
-        if (! in_array($baseUrl, $this->targets)) $this->targets[] = $baseUrl;
         // Silently skip all non-HTML documents
         if (! $doc instanceof Spizer_Document_Html) return;
+
+        // Add document URL to the list of visited pages
+        $baseUrl = $doc->getUrl();
+        if (! in_array($baseUrl, $this->targets)) $this->targets[] = $baseUrl;
 
         $pagerize = new Diggin_Scraper_Helper_Simplexml_Pagerize(simplexml_import_dom($doc->getDomDocument()),
                             array('baseUrl' => $this->toUrl($doc->getUrl()))
@@ -34,20 +35,24 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
         }
     }
 
-    //ignore port and fragment
+    /**
+     * ignore port and fragment
+     * for match siteinfo(wedata)'s url-regex
+     *
+     */
     private function toUrl(Zend_Uri $uri)
     {
         return $uri->getScheme().'://'.$uri->getHost().$uri->getPath().$uri->getQuery();
     }
 
     //borrowed from Spizer_Handler_LinkAppender
-    private function addToQueue($url, $referrer)
+    private function addToQueue($url, $referer)
     {
         $url = (string) $url;
         
         if (! in_array($url, $this->targets)) {
             $request = new Spizer_Request($url);
-            $request->setReferrer($referrer);
+            $request->setReferer($referer);
             $this->engine->getQueue()->append($request);
             
             $this->targets[] = $url;
