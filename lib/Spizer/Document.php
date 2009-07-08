@@ -98,7 +98,6 @@ class Spizer_Document
 	    $url     = $request->getUri();
 	    $code    = $response->getStatus();
 	    $headers = $response->getAllHeaders();
-	    $body    = $response->getBody();
 
 	    // Find out the content type of the document
 	    if (isset($headers['content-type'])) {
@@ -112,15 +111,18 @@ class Spizer_Document
 		switch ($type) {
 			case 'text/html':
 			case 'text/xhtml':
+	            $body    = $response->getBody();
 				$class = 'Spizer_Document_Html';
 				break;
 				
 			case 'text/xml':
 			case 'application/xml':
+	            $body    = $response->getBody();
 			    $class = 'Spizer_Document_Xml';
 			    break;
 			    
 			default:
+	            $body    = $response->getRawBody();
 				$class = 'Spizer_Document';
 				break;
 		}

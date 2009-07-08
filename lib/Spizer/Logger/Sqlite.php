@@ -82,7 +82,7 @@ class Spizer_Logger_Sqlite implements Spizer_Logger_Interface
         					id INTEGER NOT NULL PRIMARY KEY, 
         					microtime REAL NOT NULL, 
         					url TEXT NOT NULL,
-        					referrer TEXT, 
+        					referer TEXT, 
         					method VARCHAR(10) NOT NULL)");
         
         $this->db->query("CREATE TABLE IF NOT EXISTS request_headers(
@@ -148,7 +148,7 @@ class Spizer_Logger_Sqlite implements Spizer_Logger_Interface
         $this->db->insert('requests', array(
             'microtime' => microtime(true),
             'url'       => $request->getUri(),
-            'referrer'  => $request->getReferrer(),
+            'referer'  => $request->getReferer(),
             'method'    => $request->getMethod()
         ));
         

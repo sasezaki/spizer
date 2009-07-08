@@ -64,11 +64,11 @@ class Spizer_Request
     protected $body    = '';
     
     /**
-     * First page referring this request 
+     * First page refering this request 
      *
      * @var string
      */
-    protected $referrer = null;
+    protected $referer = null;
     
     /**
      * Create a new request object
@@ -92,23 +92,23 @@ class Spizer_Request
     }
     
     /**
-     * Set this request's referrer
+     * Set this request's referer
      *
-     * @param Zend_Uri_Http|string $referrer
+     * @param Zend_Uri_Http|string $referer
      */
-    public function setReferrer($referrer)
+    public function setReferer($referer)
     {
-        $this->referrer = (string) $referrer;
+        $this->referer = (string) $referer;
     }
     
     /**
-     * Get the referrer to this request
+     * Get the referer to this request
      *
-     * @return string|null Will return null if no referrer is known
+     * @return string|null Will return null if no referer is known
      */
-    public function getReferrer()
+    public function getReferer()
     {
-        return $this->referrer;
+        return $this->referer;
     }
     
     /**
@@ -156,7 +156,19 @@ class Spizer_Request
             return null;
         } 
     }
-    
+
+    /**
+     * Set the body for POSt and Put requests
+     * this is used Spizer_Engine:->run() 
+     * same.$httpclien->setRawData()
+     *
+     * @param string (@todo handle array)
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+
     /**
      * Get the request body for POST and PUT requests
      *

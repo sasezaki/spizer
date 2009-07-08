@@ -133,13 +133,13 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
      *
      * @param Zend_Uri_Http|string $url
      */
-    private function addToQueue($url, $referrer)
+    private function addToQueue($url, $referer)
     {
         $url = (string) $url;
         
         if (! in_array($url, $this->targets)) {
             $request = new Spizer_Request($url);
-            $request->setReferrer($referrer);
+            $request->setReferer($referer);
             $this->engine->getQueue()->append($request);
             
             $this->targets[] = $url;

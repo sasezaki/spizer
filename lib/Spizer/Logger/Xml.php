@@ -131,7 +131,7 @@ class Spizer_Logger_Xml implements Spizer_Logger_Interface
         $this->writeXml('<method>' . htmlentities($request->getMethod()) . '</method>');
         
         $ref = $request->getRefererrer();
-        if ($ref) $this->writeXml('<referrer>' . htmlentities($ref) . '</referrer>');
+        if ($ref) $this->writeXml('<referer>' . htmlentities($ref) . '</referer>');
         
         foreach($request->getAllHeaders() as $header => $value) {
             $this->writeXml('<header name="' . $header . '">' . htmlentities($value) . "</header>");
