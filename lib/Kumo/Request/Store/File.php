@@ -31,12 +31,12 @@ class Kumo_Request_Store_File extends Kumo_Request_Store
     public function rewind()
     {
         rewind($this->fp);
-        $this->line = fgets($this->fp);
     }
 
     public function open()
     {
         $this->fp = fopen($this->fname, 'r');
+        $this->line = fgets($this->fp);
     }
 
     public function current()
