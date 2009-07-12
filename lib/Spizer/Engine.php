@@ -122,7 +122,9 @@ class Spizer_Engine
 		$this->httpClient->setConfig($httpOpts);
 		
 		// Set up the queue
-		$this->queue = new Spizer_Queue($this->config['lifo']);
+		//$this->queue = new Spizer_Queue($this->config['lifo']);
+        //@todo create lifo-support custom Zend_Queue_Adapter_*
+		$this->queue = new Spizer_Queue('Array', array('name' => 'spizer'));
 	}
 	
 	/**
