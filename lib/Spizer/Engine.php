@@ -84,7 +84,9 @@ class Spizer_Engine
 	 */
 	protected $config       = array(
 	    'savecookies' => true,
-	    'lifo'        => false,
+	    'queueAdapter' => 'Array',
+        'queue' =>  array('name' => 'spizer'),
+        'lifo'        => false,
 	    'httpOpts'    => array()
 	);
 	
@@ -102,11 +104,13 @@ class Spizer_Engine
 	 */
 	public function __construct(array $config = array())
 	{
-   		// Load configuration
-		foreach ($config as $k => $v) {
-			$this->config[$k] = $v;
-		}
-		
+        // Load configuration
+        foreach ($config as $k => $v) {
+            $this->config[$k] = $v;
+        }
+        //
+        //if(!isset($this->config['queue']['name'])
+
 		// Set up the HTTP client
 		$this->httpClient = new Zend_Http_Client();
 		if ($this->config['savecookies']) $this->httpClient->setCookieJar();
@@ -124,7 +128,7 @@ class Spizer_Engine
 		// Set up the queue
 		//$this->queue = new Spizer_Queue($this->config['lifo']);
         //@todo create lifo-support custom Zend_Queue_Adapter_*
-		$this->queue = new Spizer_Queue('Array', array('name' => 'spizer'));
+        $this->queue = new Spizer_Queue($this->config['queueAdapter'], $this->config['queue']);
 	}
 	
 	/**
