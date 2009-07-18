@@ -82,14 +82,14 @@ class Spizer_Engine
 	 *
 	 * @var array
 	 */
-	protected $config       = array(
-	    'savecookies' => true,
-	    'queueAdapter' => 'Array',
+    protected $config       = array(
+        'savecookies' => true,
+        'queueAdapter' => 'Array',
         'queue' =>  array('name' => 'spizer'),
         'lifo'        => false,
-	    'httpOpts'    => array()
-	);
-	
+        'httpOpts'    => array()
+    );
+    
 	/**
 	 * Request counter
 	 *
@@ -126,9 +126,9 @@ class Spizer_Engine
 		$this->httpClient->setConfig($httpOpts);
 		
 		// Set up the queue
-		//$this->queue = new Spizer_Queue($this->config['lifo']);
+		$this->queue = new Spizer_Queue($this->config['lifo']);
         //@todo create lifo-support custom Zend_Queue_Adapter_*
-        $this->queue = new Spizer_Queue($this->config['queueAdapter'], $this->config['queue']);
+        //$this->queue = new Spizer_Queue($this->config['queueAdapter'], $this->config['queue']);
 	}
 	
 	/**
@@ -206,19 +206,19 @@ class Spizer_Engine
 		// Go!
 		while (($request = $this->queue->next())) {
 		    $this->logger->startPage();
-	        $this->logger->logRequest($request);
-		    
-    	    // Prepare HTTP client for next request
-	        $this->httpClient->resetParameters();
-	        $this->httpClient->setUri($request->getUri());
-    	    $this->httpClient->setMethod($request->getMethod());
-	        $this->httpClient->setHeaders($request->getAllHeaders());
-	        $this->httpClient->setRawData($request->getBody());
-		    
-       	    // Send request, catching any HTTP related issues that might happen
-       	    try {
-	            $response = new Spizer_Response($this->httpClient->request());
-       	    } catch (Zend_Exception $e) {
+            $this->logger->logRequest($request);
+    
+            // Prepare HTTP client for next request
+            $this->httpClient->resetParameters();
+            $this->httpClient->setUri($request->getUri());
+            $this->httpClient->setMethod($request->getMethod());
+            $this->httpClient->setHeaders($request->getAllHeaders());
+            $this->httpClient->setRawData($request->getBody());
+            
+            // Send request, catching any HTTP related issues that might happen
+            try {
+                $response = new Spizer_Response($this->httpClient->request());
+            } catch (Zend_Exception $e) {
        	        fwrite(STDERR, "Error executing request: {$e->getMessage()}.\n");
        	        fwrite(STDERR, "Request information:\n");
        	        fwrite(STDERR, "  {$request->getMethod()} {$request->getUri()}\n");
