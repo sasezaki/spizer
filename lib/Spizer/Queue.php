@@ -47,10 +47,7 @@ require_once 'Spizer/Request.php';
  * @author     Shahar Evron, shahar.evron@gmail.com
  * @license    Licensed under the Apache License 2.0, see COPYING for details
  */
-
-require_once 'Zend/Queue.php';
-
-class Spizer_Queue extends Zend_Queue
+class Spizer_Queue implements Countable
 {
     /**
      * Array of targets 
@@ -58,8 +55,6 @@ class Spizer_Queue extends Zend_Queue
      * @var array
      */
     private $targets = array();
-
-    private $counter = 0;
     
     /**
      * LIFO flag - if set to true, the queue is in fact a stack, serving 
@@ -74,12 +69,10 @@ class Spizer_Queue extends Zend_Queue
      *
      * @param array $targets Array of targets
      */
-    /**
     public function __construct($lifo = false)
     {
         $this->lifo = (boolean) $lifo;
     }
-    **/
         
     /**
      * Get the count of pending targets.
@@ -88,7 +81,7 @@ class Spizer_Queue extends Zend_Queue
      */
     public function count() 
     {
-        return $this->counter;
+        return count($this->targets);
     }
     
     /**
@@ -98,20 +91,11 @@ class Spizer_Queue extends Zend_Queue
      */
     public function next()
     {
-        $messages = $this->receive();
-        if (!$messages->valid() ){
-            return false;
-        }
-
-        return unserialize($messages->current()->body);
-
-        /*
         if ($this->lifo) {
-            return array_pop(unserialize($this->targets));
+            return array_pop($this->targets);
         } else {
             return array_shift($this->targets);
         }
-        */
     }
     
 	/**
@@ -126,8 +110,7 @@ class Spizer_Queue extends Zend_Queue
 		    $value = new Spizer_Request((string) $value);
 	    }
 		
-        $this->send(serialize($value));
-
-        $this->counter++;
+	    $this->targets[] = $value;
 	}
 }
+
