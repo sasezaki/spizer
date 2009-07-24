@@ -64,11 +64,12 @@ class Spizer_Request
     protected $body    = '';
     
     /**
-     * First page refering this request 
+     * First page referring this request 
+     * *Not http-referer*
      *
      * @var string
      */
-    protected $referer = null;
+    protected $referrer = null;
     
     /**
      * Create a new request object
@@ -92,23 +93,23 @@ class Spizer_Request
     }
     
     /**
-     * Set this request's referer
+     * Set this request's referrer
      *
-     * @param Zend_Uri_Http|string $referer
+     * @param Zend_Uri_Http|string $referrer
      */
-    public function setReferer($referer)
+    public function setReferrer($referrer)
     {
-        $this->referer = (string) $referer;
+        $this->referrer = (string) $referrer;
     }
     
     /**
-     * Get the referer to this request
+     * Get the referrer to this request
      *
-     * @return string|null Will return null if no referer is known
+     * @return string|null Will return null if no referrer is known
      */
-    public function getReferer()
+    public function getReferrer()
     {
-        return $this->referer;
+        return $this->referrer;
     }
     
     /**

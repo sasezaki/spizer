@@ -46,13 +46,13 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
     }
 
     //borrowed from Spizer_Handler_LinkAppender
-    private function addToQueue($url, $referer)
+    private function addToQueue($url, $referrer)
     {
         $url = (string) $url;
         
         if (! in_array($url, $this->targets)) {
             $request = new Spizer_Request($url);
-            $request->setReferer($referer);
+            $request->setReferrer($referrer);
             $this->engine->getQueue()->append($request);
             
             $this->targets[] = $url;
