@@ -3,10 +3,13 @@ require_once 'Zend/Queue/Message.php';
 require_once 'Zend/Json.php';
 require_once 'Spizer/Request.php';
 
-class Kumo_ZFQueueCustom_Message extends Zend_Queue_Message
+class Kumo_CustomZFQueue_Message extends Zend_Queue_Message
 {
     public function __construct($mixed)
     {
+        if (is_array($mixed)) {
+            return parent::__construct($mixed);
+        }
         $this->setBody($mixed);
     }
 
@@ -15,7 +18,7 @@ class Kumo_ZFQueueCustom_Message extends Zend_Queue_Message
 
         if (is_string($mixed)) {
             //handle as url
-            $request = array('url' => $mixed
+            $request = array('uri' => $mixed,
                              'method' => 'GET');
         } else if ($mixed instanceof Spizer_Request) {
 
@@ -26,6 +29,10 @@ class Kumo_ZFQueueCustom_Message extends Zend_Queue_Message
                         'body' => $mixed->getBody(),
                         'referrer' => $mixed->getReferrer()
                         );
+        } else {
+            require_once 'Kumo/Exception.php';
+            var_dump($mixed);
+            throw new Kumo_Exception('unknown value type'.$mixed);
         }
         // else if $mixed instanceof Zend_Http_Client
 
@@ -39,9 +46,13 @@ class Kumo_ZFQueueCustom_Message extends Zend_Queue_Message
         $request = new Spizer_Request($data['uri'], $data['method']);
         //$request->setHeaders();
         $request->setBody($data['body']);
-        $request->setReferrer($data['referrer']);
+        $request->setReferrer(isset($data['referrer'])? $data['referrer']: null);
         
         return $request;
     }
 
+    public function __toString() 
+    {
+        return $this->_data['body'];
+    }
 }
