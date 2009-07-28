@@ -21,12 +21,15 @@ class Kumo_Handler_RequestMessageQueueSenderSample extends Kumo_Handler_RequestM
     public function handle(Spizer_Document $doc)
     {
         //$doc
-        //
-        $req = 'http://test.org/'.time();
-        $req = new Spizer_Request($req);
-        $this->send($req);
+        foreach ($doc->getLinks() as $link) {
+            if(@parse_url($link, PHP_URL_HOST)) {
+                $req = new Spizer_Request($link);
+                $req->setReferrer($doc->getUrl());
+                $this->send($req);
+            }
+        }
 
-        var_dump($this->getMessageQueue()->receive(1));
+        var_dump($this->getMessageQueue()->receive(1)->current()->getBody());
     }
 
     //public function setCallbackHandler(Spizer_Handler_Abstract $handler)
