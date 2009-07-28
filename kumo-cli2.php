@@ -27,7 +27,7 @@ require_once 'Spizer/Handler/ZendImages.php';
 require_once 'Spizer/Handler/StringMatch.php';
 require_once 'Spizer/Handler/RegexMatch.php';
 require_once 'Kumo/Handler/RegexMatch.php';
-require_once 'Kumo/Handler/RequestSender.php';
+require_once 'Kumo/Handler/RequestMessageQueueSenderSample.php';
 require_once 'Kumo/Handler/Image.php';
 require_once 'Spizer/Logger/Sqlite.php';
 
@@ -90,7 +90,7 @@ $spizer->addHandler(new Spizer_Handler_LinkAppender(array(
     'domain'        => parse_url($url, PHP_URL_HOST) 
 )));
 
-$spizer->addHandler(new Kumo_Handler_RequestSender(array(
+$spizer->addHandler(new Kumo_Handler_RequestMessageQueueSenderSample(array(
     'options' => array('name' => 'test')
 )));
 

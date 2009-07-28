@@ -1,19 +1,19 @@
 <?php
 
 require_once 'Spizer/Handler/Abstract.php';
-require_once 'Kumo/Handler/CustomZFQueueSenderAbstract.php';
+require_once 'Kumo/Handler/RequestMessageQueueSenderAbstract.php';
 
 /**
  * Send Spizer_Reqeust to Zend_Queue
  */ 
-class Kumo_Handler_RequestSender extends Kumo_Handler_CustomZFQueueSenderAbstract
+class Kumo_Handler_RequestMessageQueueSenderSample extends Kumo_Handler_RequestMessageQueueSenderAbstract
 {
     //$targets 
 
     protected $config = array(
         'adapter' => 'Array',
         'options' => array(
-                    'name' => 'kumo_req', //base name for Zend_Queue
+                    'name' => 'kumo_req', // name for Zend_Queue
                     ),
         'timeout' => null
     );
@@ -26,7 +26,9 @@ class Kumo_Handler_RequestSender extends Kumo_Handler_CustomZFQueueSenderAbstrac
         $req = new Spizer_Request($req);
         $this->send($req);
 
-        var_dump($this->getCustomZFQueue()->receive(1));
+        var_dump($this->getMessageQueue()->receive(1));
     }
 
+    //public function setCallbackHandler(Spizer_Handler_Abstract $handler)
+    //{}
 }

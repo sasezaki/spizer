@@ -3,7 +3,7 @@ require_once 'Zend/Queue/Message.php';
 require_once 'Zend/Json.php';
 require_once 'Spizer/Request.php';
 
-class Kumo_CustomZFQueue_Message extends Zend_Queue_Message
+class Kumo_Request_MessageQueue_Message extends Zend_Queue_Message
 {
     public function __construct($mixed)
     {
