@@ -83,7 +83,7 @@ class Spizer_Document
 	
 	public function getAllHeaders()
 	{
-		return $this->headers();
+		return $this->headers;
 	}
 	
 	/**
