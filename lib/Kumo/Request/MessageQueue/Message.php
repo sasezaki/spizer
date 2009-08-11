@@ -31,7 +31,6 @@ class Kumo_Request_MessageQueue_Message extends Zend_Queue_Message
                         );
         } else {
             require_once 'Kumo/Exception.php';
-            var_dump($mixed);
             throw new Kumo_Exception('unknown value type'.$mixed);
         }
         // else if $mixed instanceof Zend_Http_Client
@@ -45,7 +44,7 @@ class Kumo_Request_MessageQueue_Message extends Zend_Queue_Message
         
         $request = new Spizer_Request($data['uri'], $data['method']);
         //$request->setHeaders();
-        $request->setBody($data['body']);
+        $request->setBody(isset($data['body'])? $data['body'] : null);
         $request->setReferrer(isset($data['referrer'])? $data['referrer']: null);
         
         return $request;
