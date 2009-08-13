@@ -12,11 +12,14 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     private $_queue = null;
 
     protected $config = array(
+        'status'       => null,
+        'content-type' => null,
         'adapter' => 'Array',
         'options' => array(
                     'name' => 'kumo', //base name for Zend_Queue
                     ),
-        'timeout' => null
+        'timeout' => null,
+        'debug' => false
     );
 
     public function getMessageQueue()
@@ -31,5 +34,16 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     protected function send($request)
     {
         $this->getMessageQueue()->send(new Kumo_Request_MessageQueue_Message($request));
+    }
+
+    public function __destruct()
+    {
+        if ($this->config['debug']) {
+            foreach ($this->getMessageQueue()->receive(10) as $c => $message) {
+                echo $message;
+
+                if ($c = 10) break;
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
     private $targets = array();
 
     protected $config = array(
+        'status'       => null,
+        'content-type' => null,
         'max_follow' => false
     );
 
