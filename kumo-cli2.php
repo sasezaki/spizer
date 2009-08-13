@@ -20,16 +20,9 @@
 
 set_include_path(dirname(__FILE__) . '/lib' . PATH_SEPARATOR . get_include_path());
 
-require_once 'Zend/Console/Getopt.php';
-require_once 'Spizer/Engine.php';
-require_once 'Spizer/Handler/LinkAppender.php';
-require_once 'Spizer/Handler/ZendImages.php';
-require_once 'Spizer/Handler/StringMatch.php';
-require_once 'Spizer/Handler/RegexMatch.php';
-require_once 'Kumo/Handler/RegexMatch.php';
-require_once 'Kumo/Handler/RequestMessageQueueSenderSample.php';
-require_once 'Kumo/Handler/Image.php';
-require_once 'Spizer/Logger/Sqlite.php';
+
+require_once 'Zend/Loader/Autoloader.php';
+Zend_Loader_Autoloader::getInstance()->setFallbackAutoloader(true);
 
 $opts = new Zend_Console_Getopt(array(
     'delay|d=i'     => 'Delay between requests',
@@ -90,8 +83,16 @@ $spizer->addHandler(new Spizer_Handler_LinkAppender(array(
     'domain'        => parse_url($url, PHP_URL_HOST) 
 )));
 
+/**
 $spizer->addHandler(new Kumo_Handler_RequestMessageQueueSenderSample(array(
     'options' => array('name' => 'test')
+)));
+**/
+
+$spizer->addHandler(new Kumo_Handler_ScrapeAndRequestSender(array(
+    'options' => array('name' => 'image'),
+    'expression' => '//img',
+    'type' => '@src',
 )));
 
 // Go!
