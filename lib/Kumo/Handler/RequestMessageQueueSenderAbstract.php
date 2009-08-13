@@ -36,14 +36,4 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
         $this->getMessageQueue()->send(new Kumo_Request_MessageQueue_Message($request));
     }
 
-    public function __destruct()
-    {
-        if ($this->config['debug']) {
-            foreach ($this->getMessageQueue()->receive(10) as $c => $message) {
-                echo $message;
-
-                if ($c = 10) break;
-            }
-        }
-    }
 }
