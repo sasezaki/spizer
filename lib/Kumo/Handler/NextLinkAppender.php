@@ -23,14 +23,14 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
 
         // Add document URL to the list of visited pages
         $baseUrl = $doc->getUrl();
-        if (! in_array($baseUrl, $this->targets)) $this->targets[] = $baseUrl;
+       if (! in_array($baseUrl, $this->targets)) $this->targets[] = $baseUrl;
 
         $pagerize = new Diggin_Scraper_Helper_Simplexml_Pagerize(simplexml_import_dom($doc->getDomDocument()),
                             array('baseUrl' => $this->toUrl($doc->getUrl()))
                           );
         if ($nextLink = $pagerize->getNextLink()) {
             $max_follow = $this->config['max_follow'];
-            if (!($max_follow) or $max_follow <= $this->page_count) {
+            if (!($max_follow) or $this->page_count <= $max_follow) {
                 $this->addToQueue($nextLink, $baseUrl);
                 ++$this->page_count;
             }
