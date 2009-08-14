@@ -4,12 +4,12 @@ require_once 'Spizer/Handler/Abstract.php';
 class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 {
     protected $config = array(
-        'save_path' => null
+        'save_dir' => null
     );
 
     public function __construct($config = array())
     {
-        if (!isset($config['save_path'])) {
+        if (!isset($config['save_dir'])) {
             require_once 'Kumo/Handler/Exception.php';
             throw new Kumo_Handler_Exception('not setting save_path');
         }
@@ -24,7 +24,7 @@ class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
         $content_type = $document->getHeader('content-type');
         if(!preg_match('#image/.*#i', $content_type)) return;
 
-        $filepath = $this->config['save_path'].DIRECTORY_SEPARATOR.rawurlencode($document->getUrl());
+        $filepath = $this->config['save_dir'].DIRECTORY_SEPARATOR.rawurlencode($document->getUrl());
         file_put_contents($filepath, $document->getBody(), FILE_BINARY);
     }
 }
