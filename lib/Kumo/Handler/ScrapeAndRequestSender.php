@@ -18,7 +18,18 @@ class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQue
         $process->setArrayFlag(isset($config['arrayflag']) ? (boolean)$config['arrayflag']: true);
         $process->setType(isset($config['type']) ? $config['type']: 'TEXT');
         // use only first filter
-        $process->setFilters(isset($config['filters']) ? array_shift($config['filters']) : false);
+        if (isset($config['filters'])) {
+            if (($match = $config['filters']['matchpattern']) &&
+                ($replace = $config['filters']['replacement'])) {
+
+                require_once 'Zend/Filter/PregReplace.php';
+                $pregreplace = new Zend_Filter_PregReplace();
+                $pregreplace->setMatchPattern($match);
+                $pregreplace->setReplacement($replace);
+
+                $process->setFilters(array($pregreplace));
+            }
+        }
 
         $this->scraper = new Diggin_Scraper();
         $this->scraper->process($process);
@@ -46,6 +57,8 @@ class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQue
             $this->send($src);
         }
 
+
+        //var_dump($results['kumo']);
     }
 }
 
