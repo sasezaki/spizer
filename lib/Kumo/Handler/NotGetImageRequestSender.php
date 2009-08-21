@@ -3,7 +3,7 @@ require_once 'Diggin/Scraper.php';
 require_once 'Kumo/Handler/RequestMessageQueueSenderAbstract.php';
 require_once 'Zend/Http/Response.php';
 
-class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQueueSenderAbstract
+class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQueueSenderAbstract
 {
 
     protected $scraper = null;
@@ -51,10 +51,17 @@ class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQue
                                                       $doc->getBody())
                                , $doc->getUrl());
 
-        foreach ($results['kumo'] as $src) {
+        $targets = $this->filter($results['kumo']);
+
+        foreach ($targets as $src) {
             $this->send($src);
         }
-
     }
+
+    public function filter(array $urls)
+    {
+        return array_diff($urls, explode("\n", $this->config['have_files']));
+    }
+
 }
 

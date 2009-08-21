@@ -14,8 +14,8 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     protected $config = array(
         'status'       => null,
         'content-type' => null,
-        'adapter' => 'Array',
-        'options' => array(
+        'queue-adapter' => 'Array',
+        'queue-options' => array(
                     'name' => 'kumo', //base name for Zend_Queue
                     ),
         'timeout' => null,
@@ -25,8 +25,8 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     public function getMessageQueue()
     {
         if ($this->_queue == null) {
-            $this->_queue = new Kumo_Request_MessageQueue($this->config['adapter'], $this->config['options']);
-        } 
+            $this->_queue = new Kumo_Request_MessageQueue($this->config['queue-adapter'], $this->config['queue-options']);
+        }
 
         return $this->_queue;
     }

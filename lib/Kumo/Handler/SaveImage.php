@@ -4,7 +4,8 @@ require_once 'Spizer/Handler/Abstract.php';
 class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 {
     protected $config = array(
-        'save_dir' => null
+        'save_dir' => null,
+        'have_files' => null
     );
 
     public function __construct($config = array())
@@ -26,5 +27,11 @@ class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 
         $filepath = $this->config['save_dir'].DIRECTORY_SEPARATOR.rawurlencode($document->getUrl());
         file_put_contents($filepath, $document->getBody(), FILE_BINARY);
+        $this->addHaveFiles($document->getUrl());
+    }
+
+    public function addHaveFiles($url)
+    {
+        file_put_contents($this->config['have_files'], $url."\n", FILE_APPEND);
     }
 }
