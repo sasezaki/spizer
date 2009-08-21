@@ -35,14 +35,6 @@ if ($opts->v) {
     exit(0);
 }
 
-// Make sure we have a URL
-$args = $opts->getRemainingArgs();
-$url = isset($args[0]) ? $args[0]: null;
-if (! $url) {
-   spizer_usage();
-   exit(1); 
-}
-
 // Load configuration
 $section = 'default';
 if ($opts->s) $section = $opts->s;
@@ -67,6 +59,15 @@ if ($opts->y) {
     die_single_configfile();
 }
 
+// Make sure we have a URL
+$args = $opts->getRemainingArgs();
+$url = isset($args[0]) ? $args[0]: $config->url;
+if (! $url) {
+   spizer_usage();
+   exit(1); 
+}
+
+
 // Set up engine
 $engine = new Spizer_Engine((array) $config->engine);
 
@@ -82,18 +83,8 @@ Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(
                         )
     );
 
-
 //siteinfo配列をセットします
-Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', 
-                                array(
-                                     array('url' => '^http://framework.zend.com/code/changelog/Standard_Library/',
-                                           'nextLink' => '//div[@class="changesetList"][last()]/a'),
-                                     array('url' => '^http://musicrider.com/.*',
-                                           'nextLink' => '//a'),
-                                          )
-                                );
-
-
+Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', $config->siteinfo->toArray());
 
 //request wedata
 if (!$siteinfo = Diggin_Scraper_Helper_Simplexml_Pagerize::loadSiteinfo('wedata')) {
@@ -146,6 +137,11 @@ if (function_exists('pcntl_signal')) {
 
 // Go!
 $engine->run($url);
+
+//run queue's
+$queue = Zend_Registry::get('Diggin_Queue_Adapter_Registryarray');
+
+var_dump($queue);
 
 do_exit();
 /**
