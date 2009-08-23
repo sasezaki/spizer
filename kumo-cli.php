@@ -20,15 +20,9 @@
 
 set_include_path(dirname(__FILE__) . '/lib' . PATH_SEPARATOR . get_include_path());
 
-require_once 'Zend/Console/Getopt.php';
-require_once 'Spizer/Engine.php';
-require_once 'Spizer/Handler/LinkAppender.php';
-require_once 'Spizer/Handler/ZendImages.php';
-require_once 'Spizer/Handler/StringMatch.php';
-require_once 'Spizer/Handler/RegexMatch.php';
-require_once 'Kumo/Handler/RegexMatch.php';
-require_once 'Kumo/Handler/Image.php';
-require_once 'Spizer/Logger/Sqlite.php';
+
+require_once 'Zend/Loader/Autoloader.php';
+Zend_Loader_Autoloader::getInstance()->setFallbackAutoloader(true);
 
 $opts = new Zend_Console_Getopt(array(
     'delay|d=i'     => 'Delay between requests',
@@ -86,26 +80,20 @@ $spizer->setLogger($logger);
 
 // Set the spider to follow links, hrefs, images and script references
 $spizer->addHandler(new Spizer_Handler_LinkAppender(array(
-	'domain'        => parse_url($url, PHP_URL_HOST) 
+    'domain'        => parse_url($url, PHP_URL_HOST) 
 )));
 
-// Add some handlers to be executed on 200 OK + text/html pages
-$spizer->addHandler(new Spizer_Handler_StringMatch(array(
-    'match'        => 'error', 
-    'matchcase'    => false, 
-    'status'       => 200, 
-    'content-type' => 'text/html')));
+/**
+$spizer->addHandler(new Kumo_Handler_RequestMessageQueueSenderSample(array(
+    'options' => array('name' => 'test')
+)));
+**/
 
-$spizer->addHandler(new Spizer_Handler_StringMatch(array(
-    'match'        => 'warning', 
-    'matchcase'    => false, 
-    'status'       => 200, 
-    'content-type' => 'text/html')));
-
-$spizer->addHandler(new Kumo_Handler_RegexMatch(array(
-    'match' => '/<title>(.*)<\/title>/si')));
-$spizer->addHandler(new Kumo_Handler_Image(array(
-    'save_path' => __DIR__)));
+$spizer->addHandler(new Kumo_Handler_ScrapeAndRequestSender(array(
+    'options' => array('name' => 'image'),
+    'expression' => '//img',
+    'type' => '@src',
+)));
 
 // Go!
 $spizer->run($url);
