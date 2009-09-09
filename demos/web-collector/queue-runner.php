@@ -66,35 +66,33 @@ if (! $url) {
    spizer_usage();
    exit(1); 
 }
+//handlers.Scraper.options.queue-adapter 
+$queueConfig = $config->handlers->Scraper->options->toArray();
+$queue = new Kumo_Request_MessageQueue($queueConfig['queue-adapter'], $queueConfig['queue-options']);
+
+var_dump($queue->count());
+
+$starttime = time();
+$timeout = 30;
+
+for ($i = 0; $i < $queue->count(); $i++) {
+    $messages = $queue->receive(1);
+    $message = $messages->current();
+    //Kumo_Request_MessageQueue_Message
+        var_dump($message->getBody()->getUri()->getPath());
+    if (($starttime + $timeout) < time()) break;
+}
+exit;
+
+
+
+
+
+
 
 
 // Set up engine
 $engine = new Spizer_Engine((array) $config->engine);
-
-
-/**
- * set up next-link
- */
-Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(
-    $cache = Zend_Cache::factory($config->pagerize->cache->frontend,
-                        $config->pagerize->cache->backend,
-                        $config->pagerize->cache->frontendOptions->toArray(),
-                        $config->pagerize->cache->backendOptions->toArray()
-                        )
-    );
-
-//siteinfo配列をセットします
-Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', $config->siteinfo->toArray());
-
-//request wedata
-if (!$siteinfo = Diggin_Scraper_Helper_Simplexml_Pagerize::loadSiteinfo('wedata')) {
-    require_once 'Diggin/Service/Wedata.php';
-    $pagerize = Diggin_Service_Wedata::getItems('AutoPagerize');
-}
-
-if (isset($pagerize)) {
-    Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('wedata',new Diggin_Siteinfo($pagerize));
-}
 
 /**
  * Set up the logger object

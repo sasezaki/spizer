@@ -14,10 +14,8 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     protected $config = array(
         'status'       => null,
         'content-type' => null,
-        'queue-adapter' => 'Array',
-        'queue-options' => array(
-                    'name' => 'kumo', //base name for Zend_Queue
-                    ),
+        'queue-adapter' => null,
+        'queue-options' => array(),
         'timeout' => null,
         'debug' => false
     );
