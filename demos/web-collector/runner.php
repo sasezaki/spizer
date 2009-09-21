@@ -1,4 +1,8 @@
 <?php
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
+
+
 set_include_path(dirname(dirname(dirname(__FILE__))) . '/lib' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader/Autoloader.php';
