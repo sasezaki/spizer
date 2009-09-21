@@ -6,8 +6,9 @@ class Kumo_Handler_Debug extends Spizer_Handler_Abstract
 
     public function handle(Spizer_Document $doc)
     {
-        Zend_Debug::Dump((string)$doc->getUrl());
-        //Zend_Debug::Dump($doc->getUrl());
+        if ($this->config['do']) {
+            echo (string)$doc->getUrl();
+        }
     }
     
 }
