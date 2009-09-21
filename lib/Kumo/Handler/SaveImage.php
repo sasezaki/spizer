@@ -4,6 +4,8 @@ require_once 'Spizer/Handler/Abstract.php';
 class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 {
     protected $config = array(
+        'status' => null,
+        'content-type'=> null,
         'save_dir' => null,
         'have_files' => null
     );
@@ -20,7 +22,6 @@ class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 
     public function handle(Spizer_Document $document)
     {
-
         //check document is image
         $content_type = $document->getHeader('content-type');
         if(!preg_match('#image/.*#i', $content_type)) return;
