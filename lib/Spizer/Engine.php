@@ -82,12 +82,12 @@ class Spizer_Engine
 	 *
 	 * @var array
 	 */
-    protected $config       = array(
-        'savecookies' => true,
-        'lifo'        => false,
-        'httpOpts'    => array()
-    );
-    
+	protected $config       = array(
+	    'savecookies' => true,
+	    'lifo'        => false,
+	    'httpOpts'    => array()
+	);
+	
 	/**
 	 * Request counter
 	 *
@@ -102,11 +102,11 @@ class Spizer_Engine
 	 */
 	public function __construct(array $config = array())
 	{
-        // Load configuration
-        foreach ($config as $k => $v) {
-            $this->config[$k] = $v;
-        }
-
+   		// Load configuration
+		foreach ($config as $k => $v) {
+			$this->config[$k] = $v;
+		}
+		
 		// Set up the HTTP client
 		$this->httpClient = new Zend_Http_Client();
 		if ($this->config['savecookies']) $this->httpClient->setCookieJar();
@@ -200,19 +200,19 @@ class Spizer_Engine
 		// Go!
 		while (($request = $this->queue->next())) {
 		    $this->logger->startPage();
-            $this->logger->logRequest($request);
-    
-            // Prepare HTTP client for next request
-            $this->httpClient->resetParameters();
-            $this->httpClient->setUri($request->getUri());
-            $this->httpClient->setMethod($request->getMethod());
-            $this->httpClient->setHeaders($request->getAllHeaders());
-            $this->httpClient->setRawData($request->getBody());
-            
-            // Send request, catching any HTTP related issues that might happen
-            try {
-                $response = new Spizer_Response($this->httpClient->request());
-            } catch (Zend_Exception $e) {
+	        $this->logger->logRequest($request);
+		    
+    	    // Prepare HTTP client for next request
+	        $this->httpClient->resetParameters();
+	        $this->httpClient->setUri($request->getUri());
+    	    $this->httpClient->setMethod($request->getMethod());
+	        $this->httpClient->setHeaders($request->getAllHeaders());
+	        $this->httpClient->setRawData($request->getBody());
+		    
+       	    // Send request, catching any HTTP related issues that might happen
+       	    try {
+	            $response = new Spizer_Response($this->httpClient->request());
+       	    } catch (Zend_Exception $e) {
        	        fwrite(STDERR, "Error executing request: {$e->getMessage()}.\n");
        	        fwrite(STDERR, "Request information:\n");
        	        fwrite(STDERR, "  {$request->getMethod()} {$request->getUri()}\n");
@@ -307,7 +307,7 @@ class Spizer_Engine
 	 * @param Spizer_Request  $request
 	 * @param Spizer_Response $response
 	 */
-	private function callHandlers(Spizer_Request $request, Spizer_Response $response)
+	protected function callHandlers(Spizer_Request $request, Spizer_Response $response)
 	{
 	    $document = Spizer_Document::factory($request, $response);
 	    
@@ -317,4 +317,3 @@ class Spizer_Engine
 		}
 	}
 }
-
