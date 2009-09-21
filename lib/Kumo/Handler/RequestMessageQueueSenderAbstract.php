@@ -14,8 +14,8 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     protected $config = array(
         'status'       => null,
         'content-type' => null,
-        'queue-adapter' => null,
-        'queue-options' => array(),
+        'queueAdapter' => null,
+        'queueOptions' => array(),
         'timeout' => null,
         'debug' => false
     );
@@ -23,7 +23,7 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     public function getMessageQueue()
     {
         if ($this->_queue == null) {
-            $this->_queue = new Kumo_Request_MessageQueue($this->config['queue-adapter'], $this->config['queue-options']);
+            $this->_queue = new Kumo_Request_MessageQueue($this->config['queueAdapter'], $this->config['queueOptions']);
         }
 
         return $this->_queue;
