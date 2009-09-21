@@ -179,4 +179,13 @@ class Spizer_Request
     {
         return $this->body;
     }
+
+    /////////
+    // only setting header's value
+    // @see Zend_Http_Client -> setHeader
+    // @see getHeader
+    public function setHeader($key, $value)
+    {
+        $this->headers[$key] = $value;
+    }
 }
