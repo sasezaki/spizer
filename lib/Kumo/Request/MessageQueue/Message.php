@@ -43,7 +43,7 @@ class Kumo_Request_MessageQueue_Message extends Zend_Queue_Message
         $data = Zend_Json::decode($this->_data['body']);
         
         $request = new Spizer_Request($data['uri'], $data['method']);
-        //$request->setHeaders();
+        $request->setAllHeaders(isset($data['headers'])? $data['headers'] :null);
         $request->setBody(isset($data['body'])? $data['body'] : null);
         $request->setReferrer(isset($data['referrer'])? $data['referrer']: null);
         

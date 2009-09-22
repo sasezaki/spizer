@@ -186,6 +186,11 @@ class Spizer_Request
     // @see getHeader
     public function setHeader($key, $value)
     {
-        $this->headers[$key] = $value;
+        $this->headers[$key] = (string) $value;
+    }
+
+    public function setAllHeaders($headers)
+    {
+        $this->headers = $headers;
     }
 }
