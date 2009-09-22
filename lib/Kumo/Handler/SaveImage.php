@@ -4,8 +4,8 @@ require_once 'Spizer/Handler/Abstract.php';
 class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
 {
     protected $config = array(
-        'status' => null,
-        'content-type'=> null,
+        //'status' => null,
+        //'content-type'=> null,
         'save_dir' => null,
         'have_files' => null
     );
