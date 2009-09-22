@@ -91,7 +91,7 @@ Diggin_Scraper_Helper_Simplexml_Pagerize::setCache(
 Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', $config->siteinfo->toArray());
 
 //request wedata
-/*
+
 if (!$siteinfo = Diggin_Scraper_Helper_Simplexml_Pagerize::loadSiteinfo('wedata')) {
     require_once 'Diggin/Service/Wedata.php';
     $pagerize = Diggin_Service_Wedata::getItems('AutoPagerize');
@@ -100,7 +100,7 @@ if (!$siteinfo = Diggin_Scraper_Helper_Simplexml_Pagerize::loadSiteinfo('wedata'
 if (isset($pagerize)) {
     Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('wedata',new Diggin_Siteinfo($pagerize));
 }
-*/
+
 
 /**
  * Set up the logger object
