@@ -136,9 +136,13 @@ if (function_exists('pcntl_signal')) {
     pcntl_signal(SIGINT,  'do_exit');
     pcntl_signal(SIGTERM, 'do_exit');
 }
+$adapter     = new Zend_ProgressBar_Adapter_Console();
+$progressBar = new Zend_ProgressBar($adapter, 0, $queue->count());
 
 // Go!
-$engine->runQueue($queue);
+$engine->setProgressBar($progressBar);
+$engine->setRequestQueue($queue);
+$engine->runQueue();
 
 
 //run queue's
