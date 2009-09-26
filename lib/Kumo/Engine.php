@@ -11,6 +11,8 @@ class Kumo_Engine extends Spizer_Engine
     protected $requestQueue = null;
     /** Zend_ProgressBar */
     protected $progressBar = null;
+    protected $progressBarAdapter = null;
+    protected $doProgressBar = false;
 
     // @param boolean
     public $deleteMessage = false;
@@ -20,16 +22,21 @@ class Kumo_Engine extends Spizer_Engine
         $this->requestQueue = $queue;
     }
 
-    public function setProgressBar(Zend_ProgressBar $progressBar)
+    public function setProgressBarAdapter(Zend_ProgressBar_Adapter $adapter)
     {
-        $this->progressBar = $progressBar;
+        $this->progressBarAdapter = $adapter;
     }
 
-    public function getProgressBar()
+    public function doProgressBar($boolean)
+    {
+        $this->doProgressBar = (boolean) $boolean;
+    }
+
+    public function getProgressBar($max)
     {
         if (!$this->progressBar) {
-            //require_once 'Zend/ProgressBar.php';
-            //$this->progressBar
+            require_once 'Zend/ProgressBar.php';
+            $this->progressBar = new Zend_ProgressBar($this->progressBarAdapter, 0, $max);
         }
 
         return $this->progressBar;
@@ -52,8 +59,11 @@ class Kumo_Engine extends Spizer_Engine
 
         $messages = $this->requestQueue->receive($receive, $timeout);
 
+        $counts = count($messages);
+        //echo 'Kumo is Requesting count: '.$counts, PHP_EOL;
+        if ($this->doProgressBar) $this->getProgressBar($counts);
         $this->runMessages($messages);
-        if($this->progressBar) $this->progressBar->finish();
+        if ($this->doProgressBar) $this->progressBar->finish();
     }
 
     protected function runMessages($messages)
@@ -91,8 +101,11 @@ class Kumo_Engine extends Spizer_Engine
             // End page
             $this->logger->endPage();
             ++$this->requestCounter;
-            if ($this->progressBar) $this->progressBar->update($this->requestCounter);
-            if ($this->deleteMessage) $this->requestQueue->deleteMessage($message);
+
+            if ($this->doProgressBar) $this->progressBar->update($this->requestCounter);
+            //@todo
+            //if ($this->deleteMessage) $this->requestQueue->deleteMessage($message);
+            $this->requestQueue->deleteMessage($message);
 
             // Wait if a delay was set
             if (isset($this->config['delay'])) sleep($this->config['delay']);
