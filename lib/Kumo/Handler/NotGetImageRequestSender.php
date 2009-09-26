@@ -37,6 +37,7 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
 
     public function handle(Spizer_Document $doc)
     {
+        //$this->debug('********START****');
 
         if (!$doc instanceof Spizer_Document_Html) return;
 
@@ -50,6 +51,7 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
                                                       $headers,
                                                       $doc->getBody())
                                , $doc->getUrl());
+        //$this->debug($results);
 
         $targets = $this->filter($results['kumo']);
 
@@ -61,6 +63,14 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
             //}
 
             $this->send($request);
+        }
+    }
+
+    protected function debug()
+    {
+        $vars = func_get_args();
+        foreach ($vars as $var) {
+            Zend_Debug::dump($var);
         }
     }
 
