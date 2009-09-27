@@ -135,8 +135,8 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
      */
     private function addToQueue($url, $referrer)
     {
-        $url = (string) $url;
-        
+        $url = $this->toLazyUri($url);
+
         if (! in_array($url, $this->targets)) {
             $request = new Spizer_Request($url);
             $request->setReferrer($referrer);
@@ -144,5 +144,20 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
             
             $this->targets[] = $url;
         }
+    }
+
+    /**
+     * - force add port (80, too)
+     * - ignore flagment
+     */
+    private function toLazyUri($uri)
+    {
+        if (is_string($uri)) {
+            $uri = Zend_Uri_Http::fromString($uri);
+        }
+
+        $port = ($uri->getPort()) ? ':'.$uri->getPort() : ':80';
+
+        return $uri->getScheme().'://'.$uri->getHost().$port.$uri->getPath().$uri->getQuery();
     }
 }
