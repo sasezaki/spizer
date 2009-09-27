@@ -1,14 +1,43 @@
 <?php
-require_once 'Zend/Debug.php';
 require_once 'Spizer/Handler/Abstract.php';
 class Kumo_Handler_Debug extends Spizer_Handler_Abstract
 {
+    protected $config = array(
+        'do' => false,
+        'dumper' => 'echo',
+        'url' => false,
+        'contenttype' => false,
+        'handlers' => true,
+        'documenttype' => false
+        );
 
     public function handle(Spizer_Document $doc)
     {
-        if (isset($this->config['do']) && $this->config['do']) {
-            echo (string)$doc->getUrl(), $doc->getHeader('content-type');
+
+        //echo (string)$doc->getUrl(), $doc->getHeader('content-type'), PHP_EOL;
+        $this->dump((string)$doc->getUrl(), ' ', $doc->getHeader('content-type'), PHP_EOL);
+        
+        /*
+        if ($this->config['handlers']) {
+            $this->dump($this->engine->handlers);
         }
+        */
+        //$this->dump($this->engine);
     }
     
+    protected function dump()
+    {
+        if (!$this->config['do']) return;
+
+        $args = func_get_args();
+
+        if ($this->config['dumper'] == 'echo') {
+            foreach ($args as $arg) {
+                echo $arg;
+            }
+        } elseif ($this->config['dumper'] == 'Zend_Debug') {
+            Zend_Debug::dump($args);
+        }
+    } 
+
 }
