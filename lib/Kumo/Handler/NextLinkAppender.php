@@ -44,7 +44,11 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
      */
     private function toUrl(Zend_Uri $uri)
     {
-        return $uri->getScheme().'://'.$uri->getHost().$uri->getPath().$uri->getQuery();
+        $port = $uri->getPort();
+
+        $port = (($port > 0) and $port != '80') ? ':'.$port : '';
+
+        return $uri->getScheme().'://'.$uri->getHost().$port.$uri->getPath().$uri->getQuery();
     }
 
     //borrowed from Spizer_Handler_LinkAppender
