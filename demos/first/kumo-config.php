@@ -201,6 +201,7 @@ USAGE;
  */
 function die_single_configfile()
 {
+    global $argv;
     fwrite(STDERR, "Error: You must specifiy one (and only one) configration file.\n");
     fwrite(STDERR, "Use '{$argv[0]} --help' to get some assistance.\n");
     exit(1);
