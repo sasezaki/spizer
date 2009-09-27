@@ -77,11 +77,16 @@ $spizer = new Spizer_Engine(array(
 $logger = new Spizer_Logger_Sqlite(array('dbfile' => $log));
 $spizer->setLogger($logger);
 
+
 // Set the spider to follow links, hrefs, images and script references
 $spizer->addHandler(new Spizer_Handler_LinkAppender(array(
     'domain'        => parse_url($url, PHP_URL_HOST) 
 )));
 
+$spizer->addHandler(new Kumo_Handler_Debug(array(
+    'do' => true
+)));
+/**
 $spizer->addHandler(new Kumo_Handler_ScrapeAndRequestSender(array(
     'queueAdapter' => 'Array',
     'queueOptions' => array(
@@ -89,7 +94,7 @@ $spizer->addHandler(new Kumo_Handler_ScrapeAndRequestSender(array(
     'expression' => '//img',
     'type' => '@src',
 )));
-
+*/
 // Go!
 $spizer->run($url);
 
