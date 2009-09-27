@@ -67,7 +67,7 @@ class Spizer_Logger_Sqlite implements Spizer_Logger_Interface
         }
         
         // Instantiate the adapter
-        $this->db = Zend_Db::factory('PDO_SQLITE', array('dbname' => $config['dbfile']));
+        $this->db = Zend_Db::factory('Pdo_Sqlite', array('dbname' => $config['dbfile']));
         
         // Set up the database and tables
         if (! (isset($config['append']) && $config['append'])) {
