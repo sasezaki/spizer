@@ -20,6 +20,20 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
         'debug' => false
     );
 
+    public function __construct(array $config = array())
+    {
+        if (!is_string($config['queueAdapter'])) {
+            require_once 'Kumo/Handler/Exception.php';
+            throw new Kumo_Handler_Exception('queueAdapter must String');
+        }
+        if (!is_array($config['queueOptions'])) {
+            require_once 'Kumo/Handler/Exception.php';
+            throw new Kumo_Handler_Exception('queueOptions must array');
+        }
+
+        parent::__construct($config);
+    }
+
     public function getMessageQueue()
     {
         if ($this->_queue == null) {
