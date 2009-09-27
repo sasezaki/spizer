@@ -15,7 +15,7 @@
  * @license    Licensed under the Apache License 2.0, see COPYING for details
  */
 
-set_include_path(dirname(__FILE__) . '/lib' . PATH_SEPARATOR . get_include_path());
+set_include_path(dirname(__FILE__) . '/../../lib' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader/Autoloader.php';
 $loader = Zend_Loader_Autoloader::getInstance();

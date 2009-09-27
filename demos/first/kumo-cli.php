@@ -18,8 +18,7 @@
  * @license    Licensed under the Apache License 2.0, see COPYING for details
  */
 
-set_include_path(dirname(__FILE__) . '/lib' . PATH_SEPARATOR . get_include_path());
-
+set_include_path(dirname(__FILE__) . '/../../lib' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance()->setFallbackAutoloader(true);
@@ -83,14 +82,10 @@ $spizer->addHandler(new Spizer_Handler_LinkAppender(array(
     'domain'        => parse_url($url, PHP_URL_HOST) 
 )));
 
-/**
-$spizer->addHandler(new Kumo_Handler_RequestMessageQueueSenderSample(array(
-    'options' => array('name' => 'test')
-)));
-**/
-
 $spizer->addHandler(new Kumo_Handler_ScrapeAndRequestSender(array(
-    'options' => array('name' => 'image'),
+    'queueAdapter' => 'Array',
+    'queueOptions' => array(
+        'name' => 'test'),
     'expression' => '//img',
     'type' => '@src',
 )));
