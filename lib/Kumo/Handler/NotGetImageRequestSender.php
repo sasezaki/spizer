@@ -53,11 +53,12 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
                                , $doc->getUrl());
         //$this->debug($results);
 
-        $targets = $this->filter($results['kumo']);
+        $targets = $this->filter(array_unique($results['kumo']));
 
         foreach ($targets as $src) {
 
             $request = new Spizer_Request($src);
+            $request->setReferrer($doc->getUrl());
             //if ($this->config['referer'] === true) {
                 $request->setHeader('Referer', $this->toRefererUrl($doc->getUrl()));
             //}
