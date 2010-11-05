@@ -77,15 +77,15 @@ class Kumo_Engine extends Spizer_Engine
             $this->logger->logRequest($request);
     
             // Prepare HTTP client for next request
-            $this->httpClient->resetParameters();
-            $this->httpClient->setUri($request->getUri());
-            $this->httpClient->setMethod($request->getMethod());
-            $this->httpClient->setHeaders($request->getAllHeaders());
-            $this->httpClient->setRawData($request->getBody());
+            $this->_httpClient->resetParameters();
+            $this->_httpClient->setUri($request->getUri());
+            $this->_httpClient->setMethod($request->getMethod());
+            $this->_httpClient->setHeaders($request->getAllHeaders());
+            $this->_httpClient->setRawData($request->getBody());
             
             // Send request, catching any HTTP related issues that might happen
             try {
-                $response = new Spizer_Response($this->httpClient->request());
+                $response = new Spizer_Response($this->_httpClient->request());
             } catch (Zend_Exception $e) {
                 fwrite(STDERR, "Error executing request: {$e->getMessage()}.\n");
                 fwrite(STDERR, "Request information:\n");
@@ -111,6 +111,22 @@ class Kumo_Engine extends Spizer_Engine
             if (isset($this->_config['delay'])) sleep($this->_config['delay']);
         }
     }
+
+	/**
+	 * Call all handlers on document 
+	 *
+	 * @param Spizer_Request  $request
+	 * @param Spizer_Response $response
+	 */
+	protected function callHandlers(Spizer_Request $request, Spizer_Response $response)
+	{
+	    $document = Spizer_Document::factory($request, $response);
+	    
+	    // Run all common handlers
+	    foreach ($this->_handlers as $handler) {
+			$handler->call($document);
+		}
+	}
 
 }
 
