@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,28 +38,28 @@ require_once 'Zend/Http/Response.php';
  */
 class Spizer_Response
 {
-    protected $response = null;
+    protected $_response = null;
     
-    protected $headers  = null;
+    protected $_headers  = null;
     
     public function __construct(Zend_Http_Response $response)
     {
-        $this->response = $response;
+        $this->_response = $response;
     }
     
     public function getAllHeaders()
     {
-        if ($this->headers == null) {
-            foreach ($this->response->getHeaders() as $k => $v) {
-                $this->headers[strtolower($k)] = $v;
+        if ($this->_headers == null) {
+            foreach ($this->_response->getHeaders() as $k => $v) {
+                $this->_headers[strtolower($k)] = $v;
             }
         }
         
-        return $this->headers;
+        return $this->_headers;
     }
     
     public function __call($method, $args)
     {
-        return call_user_func(array($this->response, $method), $args);
+        return call_user_func(array($this->_response, $method), $args);
     }
 }

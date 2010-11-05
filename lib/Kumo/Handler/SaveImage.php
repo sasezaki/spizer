@@ -26,13 +26,13 @@ class Kumo_Handler_SaveImage extends Spizer_Handler_Abstract
         $content_type = $document->getHeader('content-type');
         if(!preg_match('#image/.*#i', $content_type)) return;
 
-        $filepath = $this->config['save_dir'].DIRECTORY_SEPARATOR.rawurlencode($document->getUrl());
+        $filepath = $this->_config['save_dir'].DIRECTORY_SEPARATOR.rawurlencode($document->getUrl());
         file_put_contents($filepath, $document->getBody(), FILE_BINARY);
         $this->addHaveFiles($document->getUrl());
     }
 
     public function addHaveFiles($url)
     {
-        file_put_contents($this->config['have_files'], $url."\n", FILE_APPEND);
+        file_put_contents($this->_config['have_files'], $url."\n", FILE_APPEND);
     }
 }

@@ -94,11 +94,15 @@ Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('mysiteinfo', $config->
 
 if (!$siteinfo = Diggin_Scraper_Helper_Simplexml_Pagerize::loadSiteinfo('wedata')) {
     require_once 'Diggin/Service/Wedata.php';
-    $pagerize = Diggin_Service_Wedata::getItems('AutoPagerize');
+    //if (Diggin_Version::compareVersion('0.7'))
+    //$pagerize = Diggin_Service_Wedata::getItems('AutoPagerize');
+    $wedata = new Diggin_Service_Wedata;
+    $wedata->setDatabaseName('AutoPagerize');
+    $pagerize = $wedata->getItems();
 }
 
 if (isset($pagerize)) {
-    Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('wedata',new Diggin_Siteinfo($pagerize));
+    Diggin_Scraper_Helper_Simplexml_Pagerize::appendSiteInfo('wedata',new Diggin_Siteinfo_Iterator($pagerize));
 }
 
 

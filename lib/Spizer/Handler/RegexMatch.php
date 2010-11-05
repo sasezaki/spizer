@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,10 +61,10 @@ class Spizer_Handler_RegexMatch extends Spizer_Handler_StringMatch
      */
     public function handle(Spizer_Document $document)
     {
-        if (preg_match($this->config['match'], $document->getBody(), $m, PREG_OFFSET_CAPTURE)) {
-            $this->engine->log('RegexMatch', array(
+        if (preg_match($this->_config['match'], $document->getBody(), $m, PREG_OFFSET_CAPTURE)) {
+            $this->_log(array(
                 'message' => 'Document body matched lookup expression',
-            	'regex'   => $this->config['match'],
+            	'regex'   => $this->_config['match'],
                 'match'   => $m[0][0],
                 'offset'  => $m[0][1]
             ));

@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +45,12 @@ class Spizer_Handler_NotXPath extends Spizer_Handler_XPath
         // Silently ignore non-XML documents
         if (! $document instanceof Spizer_Document_Xml) return;
         
-        $query = $this->config['query'];
+        $query = $this->_config['query'];
         $tags = $document->getXpath()->query($query);
         if ($tags->length == 0) {
             $data = array('query' => $query);
-            if (isset($this->config['message'])) $data['message'] = $this->config['message'];
-            $this->engine->log('NotXPath', $data);
+            if (isset($this->_config['message'])) $data['message'] = $this->_config['message'];
+            $this->_log($data);
         }
     }
 }

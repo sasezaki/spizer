@@ -57,9 +57,10 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
 
         foreach ($targets as $src) {
 
-            $request = new Spizer_Request($src);
+            //$request = new Spizer_Request($src);
+            $request = new Kumo_Request($src);
             $request->setReferrer($doc->getUrl());
-            //if ($this->config['referer'] === true) {
+            //if ($this->_config['referer'] === true) {
                 $request->setHeader('Referer', $this->toRefererUrl($doc->getUrl()));
             //}
 
@@ -77,7 +78,7 @@ class Kumo_Handler_NotGetImageRequestSender extends Kumo_Handler_RequestMessageQ
 
     public function filter(array $urls)
     {
-        return array_diff($urls, explode("\n", $this->config['have_files']));
+        return array_diff($urls, explode("\n", $this->_config['have_files']));
     }
 
     protected function toRefererUrl(Zend_Uri $uri)

@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ class Spizer_Handler_Logger extends Spizer_Handler_Abstract
 	 *
 	 * @var Zend_Log
 	 */
-	protected $logger = null;
+	protected $_logger = null;
 	
 	/**
 	 * Create a new Logger Handler
@@ -51,7 +51,7 @@ class Spizer_Handler_Logger extends Spizer_Handler_Abstract
 	 */
 	public function __construct(Zend_Log $logger)
 	{
-		$this->logger = $logger;
+		$this->_logger = $logger;
 	}
 	
 	/**
@@ -84,6 +84,6 @@ class Spizer_Handler_Logger extends Spizer_Handler_Abstract
 	            break;
 	    }
 		
-	    $this->logger->log($string, $level);
+	    $this->_logger->log($string, $level);
 	}
 }

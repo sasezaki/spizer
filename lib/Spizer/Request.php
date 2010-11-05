@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,21 +39,21 @@ class Spizer_Request
      *
      * @var Zend_Uri_Http
      */
-    protected $uri     = null;
+    protected $_uri     = null;
     
     /**
      * Request method (default is GET)
      *
      * @var string
      */
-    protected $method  = 'GET';
+    protected $_method  = 'GET';
     
     /**
      * Array of HTTP headers
      *
      * @var array
      */
-    protected $headers = array();
+    protected $_headers = array();
     
     /**
      * Request body (for POST and PUT requests). Note that when sending a body,
@@ -61,15 +61,14 @@ class Spizer_Request
      *
      * @var string
      */
-    protected $body    = '';
+    protected $_body    = '';
     
     /**
      * First page referring this request 
-     * *Not http-referer*
      *
      * @var string
      */
-    protected $referrer = null;
+    protected $_referrer = null;
     
     /**
      * Create a new request object
@@ -88,8 +87,8 @@ class Spizer_Request
             $uri = Zend_Uri::factory($uri);
         }
         
-        $this->uri = $uri;
-        $this->method = $method;
+        $this->_uri = $uri;
+        $this->_method = $method;
     }
     
     /**
@@ -99,7 +98,7 @@ class Spizer_Request
      */
     public function setReferrer($referrer)
     {
-        $this->referrer = (string) $referrer;
+        $this->_referrer = (string) $referrer;
     }
     
     /**
@@ -109,7 +108,7 @@ class Spizer_Request
      */
     public function getReferrer()
     {
-        return $this->referrer;
+        return $this->_referrer;
     }
     
     /**
@@ -119,7 +118,7 @@ class Spizer_Request
      */
     public function getUri()
     {
-        return $this->uri; 
+        return $this->_uri; 
     }
     
     /**
@@ -129,7 +128,7 @@ class Spizer_Request
      */
     public function getMethod()
     {
-        return $this->method;
+        return $this->_method;
     }
     
     /**
@@ -139,7 +138,7 @@ class Spizer_Request
      */
     public function getAllHeaders()
     {
-        return $this->headers;
+        return $this->_headers;
     }
     
     /**
@@ -151,25 +150,13 @@ class Spizer_Request
     public function getHeader($header)
     {
         $header = strtolower($header);
-        if (isset($this->headers[$header])) {
-            return $this->headers[$header];
+        if (isset($this->_headers[$header])) {
+            return $this->_headers[$header];
         } else {
             return null;
         } 
     }
-
-    /**
-     * Set the body for POSt and Put requests
-     * this is used Spizer_Engine:->run() 
-     * same.$httpclien->setRawData()
-     *
-     * @param string (@todo handle array)
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
-    }
-
+    
     /**
      * Get the request body for POST and PUT requests
      *
@@ -177,20 +164,6 @@ class Spizer_Request
      */
     public function getBody()
     {
-        return $this->body;
-    }
-
-    /////////
-    // only setting header's value
-    // @see Zend_Http_Client -> setHeader
-    // @see getHeader
-    public function setHeader($key, $value)
-    {
-        $this->headers[$key] = (string) $value;
-    }
-
-    public function setAllHeaders($headers)
-    {
-        $this->headers = $headers;
+        return $this->_body;
     }
 }

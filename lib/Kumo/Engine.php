@@ -100,35 +100,17 @@ class Kumo_Engine extends Spizer_Engine
         
             // End page
             $this->logger->endPage();
-            ++$this->requestCounter;
+            ++$this->_requestCounter;
 
-            if ($this->doProgressBar) $this->progressBar->update($this->requestCounter);
+            if ($this->doProgressBar) $this->progressBar->update($this->_requestCounter);
             //@todo
             //if ($this->deleteMessage) $this->requestQueue->deleteMessage($message);
             $this->requestQueue->deleteMessage($message);
 
             // Wait if a delay was set
-            if (isset($this->config['delay'])) sleep($this->config['delay']);
+            if (isset($this->_config['delay'])) sleep($this->_config['delay']);
         }
     }
 
-    /**
-     * 
-     * $messages = $queue->receive();
-     * $engine->startlogger();
-     * foreach() {
-     *     $engine->runMessage();
-     * }
-     *
-     */
-    // @todo not implemented, yet.
-    // for messages-loop handle
-    /*
-    public function runMessage($message)
-    {
-        //$request =;
-        //
-    }
-    */
 }
 

@@ -18,7 +18,7 @@ class Kumo_Handler_Debug extends Spizer_Handler_Abstract
         $this->dump((string)$doc->getUrl(), ' ', $doc->getHeader('content-type'), PHP_EOL);
         
         /*
-        if ($this->config['handlers']) {
+        if ($this->_config['handlers']) {
             $this->dump($this->engine->handlers);
         }
         */
@@ -27,15 +27,15 @@ class Kumo_Handler_Debug extends Spizer_Handler_Abstract
     
     protected function dump()
     {
-        if (!$this->config['do']) return;
+        if (!$this->_config['do']) return;
 
         $args = func_get_args();
 
-        if ($this->config['dumper'] == 'echo') {
+        if ($this->_config['dumper'] == 'echo') {
             foreach ($args as $arg) {
                 echo $arg;
             }
-        } elseif ($this->config['dumper'] == 'Zend_Debug') {
+        } elseif ($this->_config['dumper'] == 'Zend_Debug') {
             Zend_Debug::dump($args);
         }
     } 

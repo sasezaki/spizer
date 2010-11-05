@@ -8,10 +8,10 @@ class Kumo_Handler_RegexMatch extends Spizer_Handler_RegexMatch
         //get! encoding_to_utf-8
         $body = Diggin_Http_Response_Encoding::encode($document->getBody(), $document->getHeader('content-type'));
         
-        if (preg_match($this->config['match'], $body, $m, PREG_OFFSET_CAPTURE)) {
+        if (preg_match($this->_config['match'], $body, $m, PREG_OFFSET_CAPTURE)) {
             $this->engine->log('RegexMatch', array(
                 'message' => 'Document body matched lookup expression',
-              'regex' => $this->config['match'],
+              'regex' => $this->_config['match'],
                 'match' => $m[0][0],
                 'offset' => $m[0][1]
             ));

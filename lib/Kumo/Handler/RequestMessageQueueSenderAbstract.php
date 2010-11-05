@@ -37,7 +37,7 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     public function getMessageQueue()
     {
         if ($this->_queue == null) {
-            $this->_queue = new Kumo_Request_MessageQueue($this->config['queueAdapter'], $this->config['queueOptions']);
+            $this->_queue = new Kumo_Request_MessageQueue($this->_config['queueAdapter'], $this->_config['queueOptions']);
         }
 
         return $this->_queue;

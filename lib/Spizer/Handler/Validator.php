@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,5 +34,8 @@ require_once 'Spizer/Handler/Abstract.php';
  */
 class Spizer_Handler_Validator extends Spizer_Handler_Abstract  
 {
-	
+	public function handle(Spizer_Document $document)
+	{
+	    throw new Spizr_Handler_Exception("The validator handler is not implemented yet");
+	}
 }

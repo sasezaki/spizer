@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,16 +39,17 @@ require_once 'Spizer/Handler/Abstract.php';
  */
 class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract 
 {
-    private $targets = array();
+    private $_targets = array();
     
-    protected $config = array(
+    protected $_config = array(
         'status'        => null,
         'content-type'  => null,
-        'follow_href'   => true,
-        'follow_img'    => false,
-        'follow_link'   => false,
-        'follow_script' => false,
-        'same-domain'   => false
+        'followhref'    => true,
+        'followimg'     => false,
+        'followlink'    => false,
+        'followscript'  => false,
+        'followframes'  => false,
+        'samedomain'    => false
     );
     
     /**
@@ -60,23 +61,24 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
     public function handle(Spizer_Document $doc)
     {
         // If need, set the match domain according to the first URL
-        if (! isset($this->config['domain']) && $this->config['same-domain']) {
-            $this->config['domain'] = $this->engine->getBaseUri()->getHost();
+        if (! isset($this->_config['domain']) && $this->_config['samedomain']) {
+            $this->_config['domain'] = $this->_engine->getBaseUri()->getHost();
         }
         
         // Add document URL to the list of visited pages
         $baseUrl = (string) $doc->getUrl();
-        if (! in_array($baseUrl, $this->targets)) $this->targets[] = $baseUrl;
+        if (! in_array($baseUrl, $this->_targets)) $this->_targets[] = $baseUrl;
         
         // Silently skip all non-HTML documents
         if (! $doc instanceof Spizer_Document_Html) return;
         
         // Fetch links out of the document
         $links = array();
-        if ($this->config['follow_href'])   $links = array_merge($links, $doc->getLinks()); 
-        if ($this->config['follow_img'])    $links = array_merge($links, $doc->getImages());
-        if ($this->config['follow_link'])   $links = array_merge($links, $doc->getHeaderLinks());
-        if ($this->config['follow_script']) $links = array_merge($links, $doc->getScriptLinks());
+        if ($this->_config['followhref'])   $links = array_merge($links, $doc->getLinks()); 
+        if ($this->_config['followimg'])    $links = array_merge($links, $doc->getImages());
+        if ($this->_config['followlink'])   $links = array_merge($links, $doc->getHeaderLinks());
+        if ($this->_config['followscript']) $links = array_merge($links, $doc->getScriptLinks());
+        if ($this->_config['followframes']) $links = array_merge($links, $doc->getFrameLinks());
         
         // Iterate over all document links
 		foreach ($links as $link) {
@@ -89,8 +91,8 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
 			
 			// Full URI
 			if (isset($parts['host'])) { 
-				if (preg_match('/' . preg_quote($this->config['domain']) . '$/', $parts['host'])) {
-				    $this->addToQueue($link, $baseUrl);
+				if (preg_match('/' . preg_quote($this->_config['domain']) . '$/', $parts['host'])) {
+				    $this->_addToQueue($link, $baseUrl);
 				}
 
 		    // Partial URI
@@ -115,11 +117,11 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
 					    }
 				    }
 
-				    $this->addToQueue($linkUri, $baseUrl);
+				    $this->_addToQueue($linkUri, $baseUrl);
 				    
 				// If any of the URL parts is invalid, an exception will be caught here
 			    } catch (Zend_Uri_Exception $e) {
-			        $this->engine->log('LinkAppender', array(
+			        $this->_log(array(
 			            'link'    => $link,  
 			            'message' => 'Unable to parse link URL: ' . $e->getMessage()
 			        ));
@@ -133,31 +135,16 @@ class Spizer_Handler_LinkAppender extends Spizer_Handler_Abstract
      *
      * @param Zend_Uri_Http|string $url
      */
-    private function addToQueue($url, $referrer)
+    private function _addToQueue($url, $referrer)
     {
-        $url = $this->toLazyUri($url);
-
-        if (! in_array($url, $this->targets)) {
+        $url = (string) $url;
+        
+        if (! in_array($url, $this->_targets)) {
             $request = new Spizer_Request($url);
             $request->setReferrer($referrer);
-            $this->engine->getQueue()->append($request);
+            $this->_engine->getQueue()->append($request);
             
-            $this->targets[] = $url;
+            $this->_targets[] = $url;
         }
-    }
-
-    /**
-     * - force add port (80, too)
-     * - ignore flagment
-     */
-    private function toLazyUri($uri)
-    {
-        if (is_string($uri)) {
-            $uri = Zend_Uri_Http::fromString($uri);
-        }
-
-        $port = ($uri->getPort()) ? ':'.$uri->getPort() : ':80';
-
-        return $uri->getScheme().'://'.$uri->getHost().$port.$uri->getPath().$uri->getQuery();
     }
 }

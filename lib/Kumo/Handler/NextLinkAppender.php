@@ -29,7 +29,7 @@ class Kumo_Handler_NextLinkAppender extends Spizer_Handler_Abstract
                             array('baseUrl' => $this->toUrl($doc->getUrl()))
                           );
         if ($nextLink = $pagerize->getNextLink()) {
-            $max_follow = $this->config['max_follow'];
+            $max_follow = $this->_config['max_follow'];
             if (!($max_follow) or $this->page_count <= $max_follow) {
                 $this->addToQueue($nextLink, $baseUrl);
                 ++$this->page_count;

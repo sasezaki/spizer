@@ -2,7 +2,7 @@
 
 /**
  * Spizer - the flexible PHP web spider
- * Copyright 2009 Shahar Evron
+ * Copyright 2010 Shahar Evron
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,16 +61,26 @@ class Spizer_Handler_XPath extends Spizer_Handler_Abstract
         // Silently ignore non-XML documents
         if (! $document instanceof Spizer_Document_Xml) return;
         
-        $query = $this->config['query'];
+        $query = $this->_config['query'];
         $tags = $document->getXpath()->query($query);
-        if ($tags->length) {
-            $data = array(
-                'query'        => $query,
-                'matchingTags' => count($tags->length),
-            );
-            if (isset($this->config['message'])) $data['message'] = $this->config['message'];
+        if ($tags instanceof DOMNodeList) {
+            foreach ($tags as $tag) {
+                $data = array(
+                    'query' => $query,
+                );
             
-            $this->engine->log('XPath', $data);
+                if (isset($this->_config['message'])) 
+                    $data['message'] = $this->_config['message'];
+                    
+                if (isset($this->_config['captureValue'])) {
+                    $value = $document->getXpath()->evaluate($this->_config['captureValue'], $tag);
+                    if ($value) {
+                        $data['captureValue'] = (string) $value;
+                    }
+                }
+            
+                $this->_log($data);
+            }
         }
     }
 }
