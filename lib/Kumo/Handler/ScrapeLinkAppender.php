@@ -1,16 +1,22 @@
 <?php
 require_once 'Diggin/Scraper.php';
-require_once 'Kumo/Handler/RequestMessageQueueSenderAbstract.php';
+require_once 'Spizer/Handler/Abstract.php';
 require_once 'Zend/Http/Response.php';
 
-class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQueueSenderAbstract
+class Kumo_Handler_ScrapeLinkAppender
+    extends Spizer_Handler_Abstract
 {
 
     protected $scraper = null;
+    protected $_targets = array();
+    protected $_callonce = false;
+    protected static $_called = false;
 
     public function __construct(array $config = array())
     {
         parent::__construct($config);
+
+        $this->_callonce = isset($config['call-once']) ? true : false;
 
         $process = new Diggin_Scraper_Process();
         $process->setExpression($config['expression']);
@@ -37,6 +43,15 @@ class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQue
 
     public function handle(Spizer_Document $doc)
     {
+        if ($this->_callonce) {
+            if (true === $this->_callonce) {
+                $this->_callonce = 1;
+            } elseif (1 == $this->_callonce) {
+                return;
+            }
+        }
+        //var_dump(__METHOD__);
+
         if (!$doc instanceof Spizer_Document_Html) return;
 
         $headers = $doc->getAllHeaders();
@@ -45,26 +60,28 @@ class Kumo_Handler_ScrapeAndRequestSender extends Kumo_Handler_RequestMessageQue
         unset($headers['transfer-encoding']);
         unset($headers['content-encoding']);
 
-        try {
-            $results = $this->scraper->scrape(new Zend_Http_Response($doc->getStatus(),
+        $results = $this->scraper->scrape(new Zend_Http_Response($doc->getStatus(),
                                                       $headers,
                                                       $doc->getBody())
                                , $doc->getUrl());
-        } catch (Diggin_Scraper_Exception $dse) {
-            if (isset($this->_config['throwIfNotfound'])) {
-                throw $dse;
+
+        $this->_addQueue($results['kumo']);
+    }
+
+    protected function _addQueue($urls, $referer = null)
+    {
+        $urls = (array) $urls;
+         
+        foreach ($urls as $url) {
+            if (! in_array($url, $this->_targets)) {
+                $request = new Spizer_Request($url);
+                //$request->setReferrer($referrer);
+                $this->_engine->getQueue()->append($request);
+            
+                $this->_targets[] = $url;
             }
         }
-
-        if (!isset($results)) return;
-        if ($this->_config['debug']) {
-            echo 'count scrape results '. count($results['kumo']) . PHP_EOL;
-        }
-
-        foreach ($results['kumo'] as $src) {
-            $this->send($src);
-        }
-
     }
+
 }
 

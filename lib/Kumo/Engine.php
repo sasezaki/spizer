@@ -74,13 +74,15 @@ class Kumo_Engine extends Spizer_Engine
             $request = $message->getBody();
 
             $this->logger->startPage();
-            $this->logger->logRequest($request);
+            //$this->logger->logRequest($request);
     
             // Prepare HTTP client for next request
             $this->_httpClient->resetParameters();
             $this->_httpClient->setUri($request->getUri());
             $this->_httpClient->setMethod($request->getMethod());
-            $this->_httpClient->setHeaders($request->getAllHeaders());
+            if ($request->getAllHeaders()) {
+                $this->_httpClient->setHeaders($request->getAllHeaders());
+            }
             $this->_httpClient->setRawData($request->getBody());
             
             // Send request, catching any HTTP related issues that might happen
@@ -93,7 +95,7 @@ class Kumo_Engine extends Spizer_Engine
                 fwrite(STDERR, "  Referred  by: {$request->getReferrer()}\n");
             }
             
-            $this->logger->logResponse($response);
+            //$this->logger->logResponse($response);
         
             // Call handlers
             $this->callHandlers($request, $response);

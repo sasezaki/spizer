@@ -11,13 +11,14 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
      */
     private $_queue = null;
 
-    protected $config = array(
+    protected $_config = array(
         'status'       => null,
         'content-type' => null,
         'queueAdapter' => null,
         'queueOptions' => array(),
         'timeout' => null,
-        'debug' => false
+        //'debug' => false
+        'debug' => true
     );
 
     public function __construct(array $config = array())
@@ -46,6 +47,9 @@ abstract class Kumo_Handler_RequestMessageQueueSenderAbstract extends Spizer_Han
     protected function send($request)
     {
         $this->getMessageQueue()->send(new Kumo_Request_MessageQueue_Message($request));
+        if ($this->_config['debug']) {
+            echo 'send queue..'.$request.PHP_EOL;
+        }
     }
 
 }
